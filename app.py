@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from flask import (
@@ -25,7 +26,7 @@ from database import (
 
 app = Flask(__name__)
 
-app.secret_key = "peerup-ssn-secure-key"
+app.secret_key = os.environ.get("SECRET_KEY", "peerup-local-dev-key")
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
