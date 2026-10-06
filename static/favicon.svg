@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+
+    <defs>
+
+        <linearGradient id="peerupGradient" x1="0" y1="0" x2="1" y2="1">
+
+            <stop offset="0%" stop-color="#6366F1"></stop>
+
+            <stop offset="100%" stop-color="#4338CA"></stop>
+
+        </linearGradient>
+
+    </defs>
+
+
+    <rect width="64" height="64" rx="16" fill="url(#peerupGradient)"></rect>
+
+
+    <path d="
+            M19 15
+            H34
+            C44 15 50 20 50 28
+            C50 36 44 41 34 41
+            H28
+            V50
+            H19
+            Z
+
+            M28 23
+            V33
+            H34
+            C39 33 41 31 41 28
+            C41 25 39 23 34 23
+            Z
+        " fill="white"></path>
+
+</svg>

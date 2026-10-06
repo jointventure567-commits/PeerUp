@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | SSN Peer Learning Network</title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <style>
+
+        .auth-message {
+            padding: 11px 13px;
+
+            margin-bottom: 18px;
+
+            border-radius: 9px;
+
+            background: #fff4f4;
+
+            border: 1px solid #ffdada;
+
+            color: #c24141;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+
+
+        .auth-switch {
+            margin-top: 25px;
+
+            padding-top: 22px;
+
+            text-align: center;
+
+            border-top: 1px solid #edf0f5;
+
+            color: #7d8798;
+
+            font-size: 12px;
+        }
+
+
+        .auth-switch a {
+            margin-left: 4px;
+
+            color: #4f46e5;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+
+        .institution-note {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 7px;
+
+            margin-top: 18px;
+
+            color: #8a94a6;
+
+            font-size: 11px;
+        }
+
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="login-body">
+
+
+<div class="login-layout">
+
+
+    <!-- ================================================= -->
+    <!-- LEFT SIDE                                         -->
+    <!-- ================================================= -->
+
+    <section class="login-hero">
+
+
+        <a
+            class="login-logo"
+            href="{{ url_for('login') }}"
+        >
+
+            <div class="logo-icon">
+                P
+            </div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </a>
+
+
+        <div class="hero-content">
+
+
+            <div class="hero-tag">
+                BUILT FOR THE SSN COMMUNITY
+            </div>
+
+
+            <h1>
+
+                Learn from peers.
+
+                <span>
+                    Share what you know.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                PeerUp connects SSN students who want to learn
+                with students ready to help — from academics
+                and coding to design, music and practical skills.
+
+            </p>
+
+
+            <div class="hero-features">
+
+
+                <div class="hero-feature">
+
+                    <div class="feature-icon">
+                        ⌕
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Find the right peer
+                        </strong>
+
+                        <span>
+                            Search mentors by skill, subject or department.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-feature">
+
+                    <div class="feature-icon">
+                        ◎
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Connect across campus
+                        </strong>
+
+                        <span>
+                            Discover mentors and meeting spots around SSN.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-feature">
+
+                    <div class="feature-icon">
+                        ↗
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Learn, teach and grow
+                        </strong>
+
+                        <span>
+                            Book sessions, exchange skills or become a mentor.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <p class="login-footer">
+            Peer learning, built around the SSN student community.
+        </p>
+
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- RIGHT SIDE                                        -->
+    <!-- ================================================= -->
+
+    <section class="login-form-section">
+
+
+        <div class="login-card">
+
+
+            <div class="mobile-logo">
+
+                <div class="logo-icon">
+                    P
+                </div>
+
+                PeerUp
+
+            </div>
+
+
+            <div class="login-heading">
+
+
+                <h2>
+                    Welcome back
+                </h2>
+
+
+                <p>
+                    Sign in with your SSN email or Student ID.
+                </p>
+
+
+            </div>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                    <div class="auth-message">
+                        {{ message }}
+                    </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form
+                method="POST"
+                action="{{ url_for('login_user') }}"
+            >
+
+
+                <div class="form-field">
+
+                    <label>
+                        SSN Email or Student ID
+                    </label>
+
+                    <input
+                        type="text"
+                        name="student_id"
+                        placeholder="yourname@ssn.edu.in"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+
+                    <label>
+                        Password
+                    </label>
+
+
+                    <div class="password-container">
+
+
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                        >
+                            Show
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    type="submit"
+                >
+
+                    Continue to PeerUp
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+            </form>
+
+
+            <div class="institution-note">
+
+                <span>
+                    🔒
+                </span>
+
+                Exclusive to the SSN student community
+
+            </div>
+
+
+            <div class="auth-switch">
+
+                New to PeerUp?
+
+                <a href="{{ url_for('register') }}">
+                    Create your account
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+<script>
+
+function togglePassword() {
+
+    const password =
+        document.getElementById(
+            "password"
+        );
+
+    const button =
+        document.querySelector(
+            ".password-toggle"
+        );
+
+
+    if (
+        password.type === "password"
+    ) {
+
+        password.type =
+            "text";
+
+        button.textContent =
+            "Hide";
+
+    }
+
+    else {
+
+        password.type =
+            "password";
+
+        button.textContent =
+            "Show";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

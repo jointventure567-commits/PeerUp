@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | Become a Mentor</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/features.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">P</div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <span>⌂</span>
+                Home
+            </a>
+
+            <a href="{{ url_for('mentors') }}" class="nav-item">
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+            <a href="{{ url_for('campus_map') }}" class="nav-item">
+                <span>◉</span>
+                Campus Map
+            </a>
+
+            <a href="{{ url_for('bookings') }}" class="nav-item">
+                <span>◷</span>
+                My Sessions
+            </a>
+
+            <a href="{{ url_for('messages') }}" class="nav-item">
+                <span>◇</span>
+                Messages
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <span>♙</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('become_mentor') }}" class="nav-item active">
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div class="page-top-links">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="page-top-link"
+                >
+                    ← Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('profile') }}"
+                    class="page-top-link"
+                >
+                    My Profile
+                </a>
+
+            </div>
+
+            <div class="top-avatar">
+                {{ session["student"][0] }}
+            </div>
+
+        </header>
+
+
+        <div class="feature-page">
+
+
+            <div class="feature-heading">
+
+                <p class="feature-heading-label">
+                    SHARE WHAT YOU KNOW
+                </p>
+
+                <h1>
+
+                    {% if mentor %}
+                        Edit your mentor profile
+                    {% else %}
+                        Become a PeerUp mentor
+                    {% endif %}
+
+                </h1>
+
+                <p>
+                    Offer your skills to other students,
+                    earn through sessions or exchange knowledge.
+                </p>
+
+            </div>
+
+
+            <div class="mentor-setup-layout">
+
+
+                <section class="mentor-form-card page-card">
+
+
+                    <form method="POST">
+
+
+                        <div class="form-row-two">
+
+
+                            <div class="feature-field">
+
+                                <label>
+                                    Name
+                                </label>
+
+                                <input
+                                    value="{{ user['name'] }}"
+                                    disabled
+                                >
+
+                            </div>
+
+
+                            <div class="feature-field">
+
+                                <label>
+                                    Department
+                                </label>
+
+                                <input
+                                    value="{{ user['department'] }}"
+                                    disabled
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="feature-field">
+
+                            <label>
+                                Skills you can teach
+                            </label>
+
+                            <input
+                                type="text"
+                                name="skills"
+                                placeholder="Python, C++, Figma, Guitar..."
+                                value="{% if mentor %}{{ mentor['skills'] }}{% endif %}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="feature-field">
+
+                            <label>
+                                About you
+                            </label>
+
+                            <textarea
+                                name="bio"
+                                placeholder="Tell learners what you can help them with..."
+                                required
+                            >{% if mentor %}{{ mentor['bio'] }}{% endif %}</textarea>
+
+                        </div>
+
+
+                        <div class="form-row-two">
+
+
+                            <div class="feature-field">
+
+                                <label>
+                                    Preferred campus location
+                                </label>
+
+                                <select
+                                    name="location"
+                                    required
+                                >
+
+                                    {% for location in locations %}
+
+                                    <option
+                                        value="{{ location }}"
+
+                                        {% if mentor and mentor["location"] == location %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ location }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="feature-field">
+
+                                <label>
+                                    Availability
+                                </label>
+
+                                <select
+                                    name="availability"
+                                    required
+                                >
+
+                                    {% for option in [
+                                        "Available Today",
+                                        "Available Tomorrow",
+                                        "Available This Week",
+                                        "Weekends Only"
+                                    ] %}
+
+                                    <option
+                                        value="{{ option }}"
+
+                                        {% if mentor and mentor["availability"] == option %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ option }}
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="feature-field">
+
+                            <label>
+                                Session price (₹)
+                            </label>
+
+                            <input
+                                type="number"
+                                min="0"
+                                name="price"
+                                value="{% if mentor %}{{ mentor['price'] }}{% else %}100{% endif %}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+
+                            {% if mentor %}
+                                Save mentor profile →
+                            {% else %}
+                                Activate mentor profile →
+                            {% endif %}
+
+                        </button>
+
+
+                    </form>
+
+
+                </section>
+
+
+                <aside class="mentor-guide-card page-card">
+
+
+                    <h3>
+                        How mentoring works
+                    </h3>
+
+
+                    <div class="guide-step">
+
+                        <div class="guide-number">
+                            1
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Add your skills
+                            </strong>
+
+                            <span>
+                                List the subjects and skills
+                                you're comfortable teaching.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="guide-step">
+
+                        <div class="guide-number">
+                            2
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Choose your location
+                            </strong>
+
+                            <span>
+                                Learners can discover you
+                                through the SSN campus map.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="guide-step">
+
+                        <div class="guide-number">
+                            3
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Accept sessions
+                            </strong>
+
+                            <span>
+                                Learners can book paid sessions
+                                or propose a skill exchange.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="guide-step">
+
+                        <div class="guide-number">
+                            4
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Build your reputation
+                            </strong>
+
+                            <span>
+                                Great sessions earn ratings
+                                and reviews on your profile.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </aside>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+</html>

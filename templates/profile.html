@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | My Profile</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/features.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">P</div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <span>⌂</span>
+                Home
+            </a>
+
+            <a href="{{ url_for('mentors') }}" class="nav-item">
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+            <a href="{{ url_for('campus_map') }}" class="nav-item">
+                <span>◉</span>
+                Campus Map
+            </a>
+
+            <a href="{{ url_for('bookings') }}" class="nav-item">
+                <span>◷</span>
+                My Sessions
+            </a>
+
+            <a href="{{ url_for('messages') }}" class="nav-item">
+                <span>◇</span>
+                Messages
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+            <a href="{{ url_for('profile') }}" class="nav-item active">
+                <span>♙</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('become_mentor') }}" class="nav-item">
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="page-top-link"
+            >
+                ← Dashboard
+            </a>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="page-top-link"
+            >
+                Sign out
+            </a>
+
+        </header>
+
+
+        <div class="feature-page">
+
+
+            <div class="feature-heading">
+
+                <p class="feature-heading-label">
+                    YOUR ACCOUNT
+                </p>
+
+                <h1>
+                    My profile
+                </h1>
+
+                <p>
+                    Your PeerUp identity, activity
+                    and mentor status.
+                </p>
+
+            </div>
+
+
+            <section class="profile-hero-card page-card">
+
+
+                <div class="large-user-avatar">
+                    {{ user["name"][0] }}
+                </div>
+
+
+                <div class="profile-hero-main">
+
+                    <h2>
+                        {{ user["name"] }}
+                    </h2>
+
+                    <p>
+                        {{ user["department"] }}
+                        ·
+                        {{ user["year"] }}
+                    </p>
+
+                    <span class="profile-badge">
+                        Verified SSN Student
+                    </span>
+
+                </div>
+
+
+                <div class="profile-actions">
+
+
+                    {% if mentor %}
+
+                    <a
+                        href="{{ url_for('become_mentor') }}"
+                        class="outline-action"
+                    >
+                        Edit mentor profile
+                    </a>
+
+                    {% else %}
+
+                    <a
+                        href="{{ url_for('become_mentor') }}"
+                        class="primary-action"
+                    >
+                        Become a mentor
+                    </a>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </section>
+
+
+            <div class="profile-stat-grid">
+
+
+                <div class="profile-stat page-card">
+
+                    <strong>
+                        {{ booking_count }}
+                    </strong>
+
+                    <span>
+                        Sessions booked
+                    </span>
+
+                </div>
+
+
+                <div class="profile-stat page-card">
+
+                    <strong>
+                        {{ review_count }}
+                    </strong>
+
+                    <span>
+                        Reviews given
+                    </span>
+
+                </div>
+
+
+                <div class="profile-stat page-card">
+
+                    <strong>
+                        {% if mentor %}
+                            {{ mentor["sessions"] }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </strong>
+
+                    <span>
+                        Mentor sessions
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <section class="account-card page-card">
+
+                <h3>
+                    Student information
+                </h3>
+
+
+                <div class="account-row">
+
+                    <span>
+                        Student ID
+                    </span>
+
+                    <strong>
+                        {{ user["student_id"] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="account-row">
+
+                    <span>
+                        SSN Email
+                    </span>
+
+                    <strong>
+                        {{ user["email"] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="account-row">
+
+                    <span>
+                        Department
+                    </span>
+
+                    <strong>
+                        {{ user["department"] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="account-row">
+
+                    <span>
+                        Year
+                    </span>
+
+                    <strong>
+                        {{ user["year"] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="account-row">
+
+                    <span>
+                        Mentor status
+                    </span>
+
+                    <strong>
+
+                        {% if mentor %}
+                            Active mentor
+                        {% else %}
+                            Learner
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | Campus Map</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: #f7f8fc;
+            color: #182033;
+        }
+
+
+        /* ========================= */
+        /* MAP PAGE                  */
+        /* ========================= */
+
+        .map-main {
+            margin-left: 245px;
+            min-height: 100vh;
+            background: #f7f8fc;
+        }
+
+
+        .map-topbar {
+            height: 74px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 34px;
+
+            background: rgba(255,255,255,0.96);
+
+            border-bottom: 1px solid #e8ebf2;
+        }
+
+
+        .map-topbar-left {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+
+        .map-topbar-link {
+            text-decoration: none;
+
+            color: #4f46e5;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        .map-user-circle {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #4f46e5
+            );
+
+            color: white;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+
+        .map-page {
+            padding: 38px 38px 45px;
+        }
+
+
+        .map-page-header {
+            max-width: 1320px;
+
+            margin: 0 auto 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+
+            gap: 20px;
+        }
+
+
+        .map-label {
+            color: #4f46e5;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.6px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .map-page-header h1 {
+            margin: 0 0 9px;
+
+            font-size: 34px;
+
+            letter-spacing: -1.5px;
+
+            color: #151b2c;
+        }
+
+
+        .map-page-header p {
+            margin: 0;
+
+            color: #718096;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        .find-mentor-button {
+            text-decoration: none;
+
+            padding: 12px 18px;
+
+            border-radius: 10px;
+
+            background: #4f46e5;
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            box-shadow: 0 8px 24px
+                rgba(79,70,229,0.2);
+        }
+
+
+        /* ========================= */
+        /* MAP CARD                  */
+        /* ========================= */
+
+        .map-shell {
+            max-width: 1320px;
+
+            margin: auto;
+
+            height: 650px;
+
+            display: grid;
+
+            grid-template-columns:
+                300px minmax(0, 1fr);
+
+            overflow: hidden;
+
+            border-radius: 18px;
+
+            border: 1px solid #e4e8f0;
+
+            background: white;
+
+            box-shadow: 0 16px 45px
+                rgba(31,41,55,0.07);
+        }
+
+
+        /* ========================= */
+        /* LOCATIONS PANEL           */
+        /* ========================= */
+
+        .locations-panel {
+            background: white;
+
+            border-right: 1px solid #e8ebf2;
+
+            padding: 20px 15px;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .locations-heading {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 0 5px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .locations-heading h3 {
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #1e2739;
+        }
+
+
+        .locations-count {
+            padding: 5px 8px;
+
+            border-radius: 50px;
+
+            background: #f0f2f7;
+
+            color: #7d8798;
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+
+        .location-search {
+            width: 100%;
+
+            height: 42px;
+
+            padding: 0 13px;
+
+            margin-bottom: 13px;
+
+            border: 1px solid #dfe4ed;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #fafbfd;
+
+            font-family: inherit;
+
+            color: #253047;
+
+            font-size: 11px;
+        }
+
+
+        .location-search:focus {
+            border-color: #6366f1;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99,102,241,0.08);
+        }
+
+
+        .locations-list {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding-right: 3px;
+        }
+
+
+        .locations-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+
+        .locations-list::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+
+            background: #d5dae4;
+        }
+
+
+        .location-card {
+            width: 100%;
+
+            min-height: 55px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 9px 10px;
+
+            margin-bottom: 5px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+            transition: 0.18s ease;
+        }
+
+
+        .location-card:hover {
+            background: #f4f5ff;
+        }
+
+
+        .location-card.active-location {
+            background: #eef2ff;
+        }
+
+
+        .place-icon {
+            flex-shrink: 0;
+
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+
+            font-size: 15px;
+
+            font-weight: 700;
+        }
+
+
+        .location-card-text {
+            min-width: 0;
+        }
+
+
+        .location-card strong {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #273146;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        .location-card small {
+            display: block;
+
+            color: #929cad;
+
+            font-size: 8px;
+        }
+
+
+        /* ========================= */
+        /* MAP                       */
+        /* ========================= */
+
+        .map-area {
+            position: relative;
+
+            min-width: 0;
+        }
+
+
+        #campusMap {
+            width: 100%;
+            height: 650px;
+
+            background: #e9edf2;
+        }
+
+
+        .map-floating-card {
+            position: absolute;
+
+            z-index: 500;
+
+            top: 18px;
+            left: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 12px 15px;
+
+            border-radius: 12px;
+
+            background: rgba(
+                255,
+                255,
+                255,
+                0.95
+            );
+
+            box-shadow: 0 8px 25px
+                rgba(31,41,55,0.12);
+        }
+
+
+        .map-dot {
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #4f46e5;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(79,70,229,0.13);
+        }
+
+
+        .map-floating-card strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            font-size: 10px;
+
+            color: #20293b;
+        }
+
+
+        .map-floating-card span {
+            font-size: 8px;
+
+            color: #7d8798;
+        }
+
+
+        /* ========================= */
+        /* LEAFLET POPUPS            */
+        /* ========================= */
+
+        .peerup-popup {
+            font-family: "Inter", sans-serif;
+
+            padding: 3px;
+        }
+
+
+        .peerup-popup-category {
+            display: inline-block;
+
+            padding: 4px 7px;
+
+            margin-bottom: 8px;
+
+            border-radius: 5px;
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .peerup-popup h3 {
+            margin: 0 0 11px;
+
+            color: #192236;
+
+            font-size: 14px;
+        }
+
+
+        .popup-title {
+            margin-bottom: 7px;
+
+            color: #8c96a7;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.6px;
+        }
+
+
+        .popup-mentor {
+            display: block;
+
+            padding: 8px;
+
+            margin-bottom: 6px;
+
+            border-radius: 7px;
+
+            background: #f7f8fc;
+
+            text-decoration: none;
+        }
+
+
+        .popup-mentor:hover {
+            background: #eef2ff;
+        }
+
+
+        .popup-mentor strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #263047;
+
+            font-size: 10px;
+        }
+
+
+        .popup-mentor span {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #7d8798;
+
+            font-size: 8px;
+        }
+
+
+        .popup-mentor small {
+            color: #4f46e5;
+
+            font-size: 8px;
+
+            font-weight: 700;
+        }
+
+
+        .popup-empty {
+            color: #7d8798;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+
+        .popup-search {
+            display: inline-block;
+
+            margin-top: 7px;
+
+            text-decoration: none;
+
+            color: #4f46e5;
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+
+        /* ========================= */
+        /* SIDEBAR OVERRIDE          */
+        /* ========================= */
+
+        .sidebar {
+            display: flex !important;
+        }
+
+
+        /* ========================= */
+        /* RESPONSIVE                */
+        /* ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 200px !important;
+            }
+
+            .map-main {
+                margin-left: 200px;
+            }
+
+            .map-shell {
+                grid-template-columns:
+                    230px minmax(0,1fr);
+            }
+
+            .map-page {
+                padding: 28px 22px;
+            }
+
+        }
+
+
+        @media (max-width: 720px) {
+
+            .sidebar {
+                display: none !important;
+            }
+
+            .map-main {
+                margin-left: 0;
+            }
+
+            .map-shell {
+                height: auto;
+
+                grid-template-columns: 1fr;
+            }
+
+            .locations-panel {
+                height: 280px;
+
+                border-right: none;
+
+                border-bottom:
+                    1px solid #e8ebf2;
+            }
+
+            #campusMap {
+                height: 500px;
+            }
+
+            .map-page-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body>
+
+
+<div class="app-layout">
+
+
+    <!-- ========================= -->
+    <!-- SIDEBAR                  -->
+    <!-- ========================= -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">
+                P
+            </div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-item"
+            >
+                <span>⌂</span>
+                Home
+            </a>
+
+
+            <a
+                href="{{ url_for('mentors') }}"
+                class="nav-item"
+            >
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+
+            <a
+                href="{{ url_for('campus_map') }}"
+                class="nav-item active"
+            >
+                <span>◉</span>
+                Campus Map
+            </a>
+
+
+            <a
+                href="{{ url_for('bookings') }}"
+                class="nav-item"
+            >
+                <span>◷</span>
+                My Sessions
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+                <span>◇</span>
+                Messages
+            </a>
+
+
+            <div class="nav-divider"></div>
+
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+                <span>♙</span>
+                My Profile
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+
+                {{ session["student"][0] }}
+
+            </div>
+
+
+            <div class="sidebar-user-details">
+
+                <strong>
+                    {{ session["student"] }}
+                </strong>
+
+                <span>
+                    SSN Student
+                </span>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="logout-button"
+            >
+                ↗
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN                     -->
+    <!-- ========================= -->
+
+    <main class="map-main">
+
+
+        <header class="map-topbar">
+
+
+            <div class="map-topbar-left">
+
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="map-topbar-link"
+                >
+                    ← Dashboard
+                </a>
+
+
+                <a
+                    href="{{ url_for('mentors') }}"
+                    class="map-topbar-link"
+                >
+                    Find Mentors
+                </a>
+
+
+            </div>
+
+
+            <div class="map-user-circle">
+
+                {{ session["student"][0] }}
+
+            </div>
+
+
+        </header>
+
+
+        <div class="map-page">
+
+
+            <div class="map-page-header">
+
+
+                <div>
+
+                    <div class="map-label">
+                        SSN CAMPUS
+                    </div>
+
+
+                    <h1>
+                        Find mentors around campus
+                    </h1>
+
+
+                    <p>
+                        Explore PeerUp meeting points and discover
+                        students available across SSN.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('mentors') }}"
+                    class="find-mentor-button"
+                >
+                    Find a mentor →
+                </a>
+
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- MAP CONTENT              -->
+            <!-- ========================= -->
+
+            <div class="map-shell">
+
+
+                <section class="locations-panel">
+
+
+                    <div class="locations-heading">
+
+                        <h3>
+                            Campus locations
+                        </h3>
+
+
+                        <span class="locations-count">
+
+                            {{ locations|length }} places
+
+                        </span>
+
+                    </div>
+
+
+                    <input
+                        id="locationSearch"
+                        type="text"
+                        class="location-search"
+                        placeholder="Search campus locations..."
+                        autocomplete="off"
+                    >
+
+
+                    <div
+                        id="locationList"
+                        class="locations-list"
+                    >
+
+
+                        {% for place in locations %}
+
+
+                        <button
+                            type="button"
+                            class="location-card"
+                            data-name="{{ place.name }}"
+                            data-lat="{{ place.lat }}"
+                            data-lng="{{ place.lng }}"
+                        >
+
+
+                            <div class="place-icon">
+
+                                {% if place.category == "Academic" %}
+
+                                    ▣
+
+                                {% elif place.category == "Food" %}
+
+                                    ☕
+
+                                {% elif place.category == "Hostel" %}
+
+                                    ⌂
+
+                                {% elif place.category == "Landmark" %}
+
+                                    ◉
+
+                                {% else %}
+
+                                    ◆
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="location-card-text">
+
+                                <strong>
+                                    {{ place.name }}
+                                </strong>
+
+                                <small>
+                                    {{ place.category }}
+                                </small>
+
+                            </div>
+
+
+                        </button>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- MAP -->
+
+                <section class="map-area">
+
+
+                    <div id="campusMap"></div>
+
+
+                    <div class="map-floating-card">
+
+
+                        <span class="map-dot"></span>
+
+
+                        <div>
+
+                            <strong>
+                                SSN Campus
+                            </strong>
+
+                            <span>
+                                Select a pin to explore
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<!-- Flask JSON data -->
+
+<div
+    id="peerupMapData"
+    data-locations="{{ locations | tojson | forceescape }}"
+    data-mentors="{{ mentors | tojson | forceescape }}"
+    hidden
+></div>
+
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        // =========================
+        // GET DATA
+        // =========================
+
+        const dataElement =
+            document.getElementById(
+                "peerupMapData"
+            );
+
+
+        const campusLocations =
+            JSON.parse(
+                dataElement.dataset.locations
+            );
+
+
+        const campusMentors =
+            JSON.parse(
+                dataElement.dataset.mentors
+            );
+
+
+        // =========================
+        // MAP
+        // =========================
+
+        const map =
+            L.map(
+                "campusMap",
+                {
+                    zoomControl: true
+                }
+            );
+
+
+        map.setView(
+            [
+                12.7513,
+                80.1964
+            ],
+            16
+        );
+
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 20,
+
+                attribution:
+                    "&copy; OpenStreetMap contributors"
+            }
+        ).addTo(map);
+
+
+        // =========================
+        // HELPERS
+        // =========================
+
+        function escapeHTML(value) {
+
+            const element =
+                document.createElement("div");
+
+            element.textContent =
+                String(value);
+
+            return element.innerHTML;
+
+        }
+
+
+        const markers = {};
+
+
+        // =========================
+        // ADD MARKERS
+        // =========================
+
+        campusLocations.forEach(
+            function (place) {
+
+
+                const marker =
+                    L.marker(
+                        [
+                            place.lat,
+                            place.lng
+                        ]
+                    );
+
+
+                marker.addTo(map);
+
+
+                const mentorsHere =
+                    campusMentors.filter(
+                        function (mentor) {
+
+
+                            if (
+                                !mentor.location
+                            ) {
+
+                                return false;
+
+                            }
+
+
+                            return (
+                                mentor.location
+                                    .toLowerCase()
+                                    .trim()
+                                ===
+                                place.name
+                                    .toLowerCase()
+                                    .trim()
+                            );
+
+                        }
+                    );
+
+
+                let mentorHTML = "";
+
+
+                if (
+                    mentorsHere.length > 0
+                ) {
+
+
+                    mentorHTML +=
+                        `
+                        <div class="popup-title">
+                            Mentors here
+                        </div>
+                        `;
+
+
+                    mentorsHere.forEach(
+                        function (mentor) {
+
+
+                            mentorHTML +=
+                                `
+                                <a
+                                    class="popup-mentor"
+                                    href="/mentor/${mentor.id}"
+                                >
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            mentor.name
+                                        )}
+                                    </strong>
+
+                                    <span>
+                                        ${escapeHTML(
+                                            mentor.skills
+                                        )}
+                                    </span>
+
+                                    <small>
+                                        ⭐ ${escapeHTML(
+                                            mentor.rating
+                                        )}
+                                    </small>
+
+                                </a>
+                                `;
+
+                        }
+                    );
+
+
+                } else {
+
+
+                    mentorHTML =
+                        `
+                        <div class="popup-empty">
+
+                            No mentors are currently
+                            listed at this location.
+
+                        </div>
+
+                        <a
+                            href="/mentors?search=${encodeURIComponent(
+                                place.name
+                            )}"
+                            class="popup-search"
+                        >
+                            Search mentors nearby →
+                        </a>
+                        `;
+
+                }
+
+
+                const popupHTML =
+                    `
+                    <div class="peerup-popup">
+
+                        <div class="peerup-popup-category">
+
+                            ${escapeHTML(
+                                place.category
+                            )}
+
+                        </div>
+
+                        <h3>
+
+                            ${escapeHTML(
+                                place.name
+                            )}
+
+                        </h3>
+
+                        ${mentorHTML}
+
+                    </div>
+                    `;
+
+
+                marker.bindPopup(
+                    popupHTML,
+                    {
+                        minWidth: 220,
+                        maxWidth: 280
+                    }
+                );
+
+
+                markers[
+                    place.name
+                        .toLowerCase()
+                        .trim()
+                ] = marker;
+
+
+            }
+        );
+
+
+        // =========================
+        // LOCATION BUTTONS
+        // =========================
+
+        const locationCards =
+            document.querySelectorAll(
+                ".location-card"
+            );
+
+
+        locationCards.forEach(
+            function (card) {
+
+
+                card.addEventListener(
+                    "click",
+                    function () {
+
+
+                        const name =
+                            card.dataset.name;
+
+
+                        const lat =
+                            parseFloat(
+                                card.dataset.lat
+                            );
+
+
+                        const lng =
+                            parseFloat(
+                                card.dataset.lng
+                            );
+
+
+                        map.flyTo(
+                            [
+                                lat,
+                                lng
+                            ],
+                            18,
+                            {
+                                duration: 0.7
+                            }
+                        );
+
+
+                        locationCards.forEach(
+                            function (otherCard) {
+
+                                otherCard.classList
+                                    .remove(
+                                        "active-location"
+                                    );
+
+                            }
+                        );
+
+
+                        card.classList.add(
+                            "active-location"
+                        );
+
+
+                        const marker =
+                            markers[
+                                name
+                                    .toLowerCase()
+                                    .trim()
+                            ];
+
+
+                        if (marker) {
+
+
+                            setTimeout(
+                                function () {
+
+                                    marker.openPopup();
+
+                                },
+                                450
+                            );
+
+
+                        }
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        // =========================
+        // SEARCH
+        // =========================
+
+        const searchInput =
+            document.getElementById(
+                "locationSearch"
+            );
+
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+
+                const search =
+                    searchInput.value
+                        .toLowerCase()
+                        .trim();
+
+
+                locationCards.forEach(
+                    function (card) {
+
+
+                        const name =
+                            card.dataset.name
+                                .toLowerCase();
+
+
+                        card.style.display =
+                            name.includes(search)
+                            ? "flex"
+                            : "none";
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        // =========================
+        // LEAFLET SIZE FIX
+        // =========================
+
+        window.setTimeout(
+            function () {
+
+                map.invalidateSize();
+
+            },
+            250
+        );
+
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

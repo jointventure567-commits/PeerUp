@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account | PeerUp</title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <style>
+
+        .register-form-section {
+            width: 52%;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: flex-start;
+
+            padding: 50px 55px;
+
+            overflow-y: auto;
+
+            background: white;
+        }
+
+
+        .register-card {
+            width: 100%;
+
+            max-width: 520px;
+
+            padding-top: 8px;
+            padding-bottom: 35px;
+        }
+
+
+        .register-heading {
+            margin-bottom: 27px;
+        }
+
+
+        .register-heading h2 {
+            color: #111827;
+
+            font-size: 30px;
+
+            letter-spacing: -1.2px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .register-heading p {
+            color: #7a8496;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        .register-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 0 14px;
+        }
+
+
+        .full-field {
+            grid-column: 1 / -1;
+        }
+
+
+        .register-field {
+            margin-bottom: 17px;
+        }
+
+
+        .register-field label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #2b3448;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .register-field input,
+        .register-field select {
+            width: 100%;
+
+            height: 48px;
+
+            padding: 0 13px;
+
+            border: 1px solid #dfe3eb;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #fbfcfe;
+
+            color: #273146;
+
+            font-family: inherit;
+
+            font-size: 11px;
+
+            transition: .2s;
+        }
+
+
+        .register-field input:focus,
+        .register-field select:focus {
+            border-color: #6366f1;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99,102,241,.08);
+        }
+
+
+        .register-help {
+            display: block;
+
+            margin-top: 6px;
+
+            color: #9aa3b3;
+
+            font-size: 8px;
+
+            line-height: 1.5;
+        }
+
+
+        .auth-message {
+            padding: 11px 13px;
+
+            margin-bottom: 18px;
+
+            border-radius: 9px;
+
+            background: #fff4f4;
+
+            border: 1px solid #ffdada;
+
+            color: #c24141;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+
+
+        .register-switch {
+            margin-top: 21px;
+
+            text-align: center;
+
+            color: #7d8798;
+
+            font-size: 11px;
+        }
+
+
+        .register-switch a {
+            color: #4f46e5;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            margin-left: 3px;
+        }
+
+
+        .register-security {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            margin-top: 16px;
+
+            color: #929bad;
+
+            font-size: 9px;
+        }
+
+
+        @media (max-width: 1000px) {
+
+            .register-form-section {
+                width: 100%;
+
+                min-height: 100vh;
+
+                padding: 35px 25px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .register-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-field {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="login-body">
+
+
+<div class="login-layout">
+
+
+    <!-- ================================================= -->
+    <!-- LEFT                                              -->
+    <!-- ================================================= -->
+
+    <section class="login-hero">
+
+
+        <a
+            class="login-logo"
+            href="{{ url_for('login') }}"
+        >
+
+            <div class="logo-icon">
+                P
+            </div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </a>
+
+
+        <div class="hero-content">
+
+
+            <div class="hero-tag">
+                YOUR CAMPUS. YOUR COMMUNITY.
+            </div>
+
+
+            <h1>
+
+                One campus.
+
+                <span>
+                    Thousands of skills.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Join PeerUp to learn directly from students around
+                you, share what you're good at and build a stronger
+                peer-learning community across SSN.
+
+            </p>
+
+
+            <div class="hero-features">
+
+
+                <div class="hero-feature">
+
+                    <div class="feature-icon">
+                        ⌕
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Discover people
+                        </strong>
+
+                        <span>
+                            Find students who already know what you want to learn.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-feature">
+
+                    <div class="feature-icon">
+                        ◉
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Learn on campus
+                        </strong>
+
+                        <span>
+                            Connect through familiar locations across SSN.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-feature">
+
+                    <div class="feature-icon">
+                        ☆
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Become a mentor
+                        </strong>
+
+                        <span>
+                            Turn your own skills into value for other students.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <p class="login-footer">
+            PeerUp · Built for students, powered by students.
+        </p>
+
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- REGISTER FORM                                     -->
+    <!-- ================================================= -->
+
+    <section class="register-form-section">
+
+
+        <div class="register-card">
+
+
+            <div class="register-heading">
+
+                <h2>
+                    Join PeerUp
+                </h2>
+
+                <p>
+                    Create your account using your SSN student details.
+                </p>
+
+            </div>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                    <div class="auth-message">
+                        {{ message }}
+                    </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form
+                method="POST"
+                action="{{ url_for('register') }}"
+            >
+
+
+                <div class="register-grid">
+
+
+                    <div class="register-field full-field">
+
+                        <label>
+                            Full name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="register-field">
+
+                        <label>
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            name="student_id"
+                            placeholder="Your SSN Student ID"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="register-field">
+
+                        <label>
+                            SSN Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="yourname@ssn.edu.in"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="register-field">
+
+                        <label>
+                            Department
+                        </label>
+
+                        <select
+                            name="department"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                selected
+                                disabled
+                            >
+                                Select department
+                            </option>
+
+                            <option value="Biomedical Engineering">
+                                Biomedical Engineering
+                            </option>
+
+                            <option value="CSE">
+                                Computer Science & Engineering
+                            </option>
+
+                            <option value="IT">
+                                Information Technology
+                            </option>
+
+                            <option value="ECE">
+                                Electronics & Communication
+                            </option>
+
+                            <option value="EEE">
+                                Electrical & Electronics
+                            </option>
+
+                            <option value="MECH">
+                                Mechanical Engineering
+                            </option>
+
+                            <option value="Civil">
+                                Civil Engineering
+                            </option>
+
+                            <option value="Chemical">
+                                Chemical Engineering
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="register-field">
+
+                        <label>
+                            Year
+                        </label>
+
+                        <select
+                            name="year"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                selected
+                                disabled
+                            >
+                                Select year
+                            </option>
+
+                            <option value="1st Year">
+                                1st Year
+                            </option>
+
+                            <option value="2nd Year">
+                                2nd Year
+                            </option>
+
+                            <option value="3rd Year">
+                                3rd Year
+                            </option>
+
+                            <option value="4th Year">
+                                4th Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="register-field">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Create password"
+                            minlength="6"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <span class="register-help">
+                            Minimum 6 characters.
+                        </span>
+
+                    </div>
+
+
+                    <div class="register-field">
+
+                        <label>
+                            Confirm password
+                        </label>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            placeholder="Repeat password"
+                            minlength="6"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+
+                    Create my PeerUp account
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+            </form>
+
+
+            <div class="register-security">
+
+                🔒
+
+                SSN institutional email required
+
+            </div>
+
+
+            <div class="register-switch">
+
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Sign in
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>

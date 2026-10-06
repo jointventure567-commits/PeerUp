@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | My Sessions</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/features.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">P</div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <span>⌂</span>
+                Home
+            </a>
+
+            <a href="{{ url_for('mentors') }}" class="nav-item">
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+            <a href="{{ url_for('campus_map') }}" class="nav-item">
+                <span>◉</span>
+                Campus Map
+            </a>
+
+            <a href="{{ url_for('bookings') }}" class="nav-item active">
+                <span>◷</span>
+                My Sessions
+            </a>
+
+            <a href="{{ url_for('messages') }}" class="nav-item">
+                <span>◇</span>
+                Messages
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <span>♙</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('become_mentor') }}" class="nav-item">
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div class="page-top-links">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="page-top-link"
+                >
+                    ← Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('mentors') }}"
+                    class="page-top-link"
+                >
+                    Find Mentors
+                </a>
+
+            </div>
+
+            <a
+                href="{{ url_for('profile') }}"
+                class="top-avatar"
+                style="text-decoration:none;"
+            >
+                {{ session["student"][0] }}
+            </a>
+
+        </header>
+
+
+        <div class="feature-page">
+
+
+            <div class="feature-heading">
+
+                <p class="feature-heading-label">
+                    YOUR LEARNING
+                </p>
+
+                <h1>
+                    My sessions
+                </h1>
+
+                <p>
+                    Manage your PeerUp bookings,
+                    payments and mentor sessions.
+                </p>
+
+            </div>
+
+
+            <div class="booking-list">
+
+
+                {% for booking in bookings %}
+
+
+                <div class="booking-card">
+
+
+                    <div class="booking-date">
+
+                        <strong>
+                            {{ booking["session_date"] }}
+                        </strong>
+
+                        <span>
+                            {{ booking["session_time"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="booking-info">
+
+                        <h3>
+                            {{ booking["mentor_name"] }}
+                        </h3>
+
+                        <p>
+                            {{ booking["skills"] }}
+                        </p>
+
+
+                        <div class="booking-tags">
+
+                            <span>
+                                {{ booking["session_type"] }}
+                            </span>
+
+                            <span>
+                                {{ booking["exchange_type"] }}
+                            </span>
+
+                            <span>
+                                📍 {{ booking["location"] }}
+                            </span>
+
+                            {% if booking["exchange_skill"] %}
+
+                            <span>
+                                Exchange:
+                                {{ booking["exchange_skill"] }}
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+
+                        <div
+                            class="booking-status
+
+                            {% if booking['status'] == 'Cancelled' %}
+                                status-cancelled
+                            {% elif booking['status'] == 'Awaiting Payment' %}
+                                status-awaiting
+                            {% endif %}
+                            "
+                            style="margin-bottom:9px;"
+                        >
+                            {{ booking["status"] }}
+                        </div>
+
+
+                        <div class="session-actions">
+
+
+                            {% if booking["payment_status"] == "Pending" and booking["status"] != "Cancelled" %}
+
+                            <a
+                                class="small-action pay"
+                                href="{{ url_for(
+                                    'payment',
+                                    booking_id=booking['id']
+                                ) }}"
+                            >
+                                Pay ₹{{ booking["price"] }}
+                            </a>
+
+                            {% endif %}
+
+
+                            <a
+                                class="small-action"
+                                href="{{ url_for(
+                                    'messages',
+                                    mentor_id=booking['mentor_id']
+                                ) }}"
+                            >
+                                Message
+                            </a>
+
+
+                            <a
+                                class="small-action"
+                                href="{{ url_for(
+                                    'mentor_profile',
+                                    mentor_id=booking['mentor_id']
+                                ) }}"
+                            >
+                                Review
+                            </a>
+
+
+                            {% if booking["status"] != "Cancelled" %}
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'cancel_booking',
+                                    booking_id=booking['id']
+                                ) }}"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="small-action danger"
+                                >
+                                    Cancel
+                                </button>
+
+                            </form>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                {% else %}
+
+
+                <div class="empty-state">
+
+                    <h3>
+                        No sessions booked yet
+                    </h3>
+
+                    <p>
+                        Find a mentor and schedule
+                        your first PeerUp session.
+                    </p>
+
+                    <a
+                        class="primary-link"
+                        href="{{ url_for('mentors') }}"
+                    >
+                        Find mentors
+                    </a>
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+</html>

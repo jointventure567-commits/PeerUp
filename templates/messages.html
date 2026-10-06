@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | Messages</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/features.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">P</div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <span>⌂</span>
+                Home
+            </a>
+
+            <a href="{{ url_for('mentors') }}" class="nav-item">
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+            <a href="{{ url_for('campus_map') }}" class="nav-item">
+                <span>◉</span>
+                Campus Map
+            </a>
+
+            <a href="{{ url_for('bookings') }}" class="nav-item">
+                <span>◷</span>
+                My Sessions
+            </a>
+
+            <a href="{{ url_for('messages') }}" class="nav-item active">
+                <span>◇</span>
+                Messages
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <span>♙</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('become_mentor') }}" class="nav-item">
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div class="page-top-links">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="page-top-link"
+                >
+                    ← Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('mentors') }}"
+                    class="page-top-link"
+                >
+                    Find Mentors
+                </a>
+
+            </div>
+
+            <a
+                href="{{ url_for('profile') }}"
+                class="top-avatar"
+                style="text-decoration:none;"
+            >
+                {{ session["student"][0] }}
+            </a>
+
+        </header>
+
+
+        <div
+            class="feature-page"
+            style="padding-bottom:30px;"
+        >
+
+
+            <div class="feature-heading">
+
+                <p class="feature-heading-label">
+                    CONNECT
+                </p>
+
+                <h1>
+                    Messages
+                </h1>
+
+                <p>
+                    Talk directly with mentors before
+                    and after your sessions.
+                </p>
+
+            </div>
+
+
+            <div class="messages-shell page-card">
+
+
+                <aside class="conversation-panel">
+
+
+                    <div class="conversation-panel-header">
+
+                        <h3>
+                            Mentors
+                        </h3>
+
+                        <p>
+                            Your PeerUp conversations
+                        </p>
+
+                    </div>
+
+
+                    <div class="conversation-list">
+
+
+                        {% for mentor in mentors %}
+
+
+                        <a
+                            href="{{ url_for(
+                                'messages',
+                                mentor_id=mentor['id']
+                            ) }}"
+                            class="conversation-item
+
+                            {% if selected_mentor and selected_mentor['id'] == mentor['id'] %}
+                                active
+                            {% endif %}
+                            "
+                        >
+
+                            <div class="conversation-avatar">
+                                {{ mentor["name"][0] }}
+                            </div>
+
+                            <div class="conversation-info">
+
+                                <strong>
+                                    {{ mentor["name"] }}
+                                </strong>
+
+                                <span>
+                                    {{ mentor["skills"] }}
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </aside>
+
+
+                <section class="chat-panel">
+
+
+                    {% if selected_mentor %}
+
+
+                    <div class="chat-header">
+
+
+                        <div class="chat-header-person">
+
+                            <div class="conversation-avatar">
+                                {{ selected_mentor["name"][0] }}
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    {{ selected_mentor["name"] }}
+                                </strong>
+
+                                <span>
+                                    ● {{ selected_mentor["availability"] }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            class="chat-profile-link"
+                            href="{{ url_for(
+                                'mentor_profile',
+                                mentor_id=selected_mentor['id']
+                            ) }}"
+                        >
+                            View profile
+                        </a>
+
+
+                    </div>
+
+
+                    <div
+                        class="chat-messages"
+                        id="chatMessages"
+                    >
+
+
+                        {% for message in messages %}
+
+
+                        <div
+                            class="message-row {{ message['sender_role'] }}"
+                        >
+
+                            <div class="message-bubble">
+
+                                {{ message["content"] }}
+
+                                <span class="message-time">
+                                    {{ message["created_at"] }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        {% else %}
+
+
+                        <div class="chat-empty">
+
+                            <h3>
+                                Start the conversation
+                            </h3>
+
+                            <p>
+                                Send your first message to
+                                {{ selected_mentor["name"] }}.
+                            </p>
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <form
+                        class="message-compose"
+                        method="POST"
+                        action="{{ url_for(
+                            'send_message',
+                            mentor_id=selected_mentor['id']
+                        ) }}"
+                    >
+
+                        <input
+                            type="text"
+                            name="content"
+                            placeholder="Write a message..."
+                            autocomplete="off"
+                            required
+                        >
+
+                        <button type="submit">
+                            Send →
+                        </button>
+
+                    </form>
+
+
+                    {% endif %}
+
+
+                </section>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+const chat =
+    document.getElementById(
+        "chatMessages"
+    );
+
+if (chat) {
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+}
+
+</script>
+
+
+</body>
+</html>

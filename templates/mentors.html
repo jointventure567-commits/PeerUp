@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | Find Mentors</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">P</div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-item"
+            >
+                <span>⌂</span>
+                Home
+            </a>
+
+            <a
+                href="{{ url_for('mentors') }}"
+                class="nav-item active"
+            >
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+            <a
+                href="{{ url_for('campus_map') }}"
+                class="nav-item"
+            >
+                <span>◉</span>
+                Campus Map
+            </a>
+
+            <a
+                href="{{ url_for('bookings') }}"
+                class="nav-item"
+            >
+                <span>◷</span>
+                My Sessions
+            </a>
+
+            <a
+                href="{{ url_for('messages') }}"
+                class="nav-item"
+            >
+                <span>◇</span>
+                Messages
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+            <a
+                href="{{ url_for('profile') }}"
+                class="nav-item"
+            >
+                <span>♙</span>
+                My Profile
+            </a>
+
+            <a
+                href="{{ url_for('become_mentor') }}"
+                class="nav-item"
+            >
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+                {{ session["student"][0] }}
+            </div>
+
+            <div class="sidebar-user-details">
+
+                <strong>
+                    {{ session["student"] }}
+                </strong>
+
+                <span>
+                    SSN Student
+                </span>
+
+            </div>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="logout-button"
+            >
+                ↗
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="back-link"
+                style="margin:0;"
+            >
+                ← Dashboard
+            </a>
+
+            <div class="topbar-actions">
+
+                <a
+                    href="{{ url_for('messages') }}"
+                    class="icon-button"
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        text-decoration:none;
+                        color:#4f46e5;
+                    "
+                >
+                    ◇
+                </a>
+
+                <a
+                    href="{{ url_for('profile') }}"
+                    class="top-avatar"
+                    style="text-decoration:none;"
+                >
+                    {{ session["student"][0] }}
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <div class="dashboard-content">
+
+
+            <div class="page-heading">
+
+                <p class="welcome-label">
+                    DISCOVER
+                </p>
+
+                <h1>
+                    Find your next mentor
+                </h1>
+
+                <p>
+                    Search students by skill, subject,
+                    department or campus location.
+                </p>
+
+            </div>
+
+
+            <form
+                class="mentor-search-bar"
+                action="{{ url_for('mentors') }}"
+            >
+
+                <span>⌕</span>
+
+                <input
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Try Python, Guitar, Figma, BME Block..."
+                >
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </form>
+
+
+            <div class="mentor-list-grid">
+
+
+                {% for mentor in mentors %}
+
+
+                <article class="mentor-card">
+
+
+                    <div class="mentor-card-top">
+
+                        <div class="mentor-avatar blue-avatar">
+                            {{ mentor["name"][0] }}
+                        </div>
+
+                        <div class="mentor-status">
+                            {{ mentor["availability"] }}
+                        </div>
+
+                    </div>
+
+
+                    <h3>
+                        {{ mentor["name"] }}
+                    </h3>
+
+
+                    <p class="mentor-course">
+
+                        {{ mentor["department"] }}
+                        ·
+                        {{ mentor["year"] }}
+
+                    </p>
+
+
+                    <div class="skill-tags">
+
+                        {% for skill in mentor["skills"].split(",") %}
+
+                        <span>
+                            {{ skill.strip() }}
+                        </span>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="mentor-location">
+                        📍 {{ mentor["location"] }}
+                    </div>
+
+
+                    <div class="mentor-meta">
+
+                        <span>
+                            ⭐ {{ mentor["rating"] }}
+                        </span>
+
+                        <span>
+                            {{ mentor["sessions"] }} sessions
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        class="mentor-button mentor-link"
+                        href="{{ url_for(
+                            'mentor_profile',
+                            mentor_id=mentor['id']
+                        ) }}"
+                    >
+                        View mentor
+                    </a>
+
+
+                </article>
+
+
+                {% else %}
+
+
+                <div class="empty-state">
+
+                    <h3>
+                        No mentors found
+                    </h3>
+
+                    <p>
+                        Try searching another skill or location.
+                    </p>
+
+                    <a
+                        href="{{ url_for('mentors') }}"
+                        class="primary-link"
+                    >
+                        View all mentors
+                    </a>
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+</html>

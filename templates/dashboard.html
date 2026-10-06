@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PeerUp | Home</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">
+                P
+            </div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-item active"
+            >
+                <span>⌂</span>
+                Home
+            </a>
+
+
+            <a
+                href="{{ url_for('mentors') }}"
+                class="nav-item"
+            >
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+
+            <a
+                href="{{ url_for('campus_map') }}"
+                class="nav-item"
+            >
+                <span>◉</span>
+                Campus Map
+            </a>
+
+
+            <a
+                href="{{ url_for('bookings') }}"
+                class="nav-item"
+            >
+                <span>◷</span>
+                My Sessions
+            </a>
+
+
+            <a
+                href="{{ url_for('messages') }}"
+                class="nav-item"
+            >
+                <span>◇</span>
+                Messages
+            </a>
+
+
+            <div class="nav-divider"></div>
+
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+
+            <a
+                href="{{ url_for('profile') }}"
+                class="nav-item"
+            >
+                <span>♙</span>
+                My Profile
+            </a>
+
+
+            <a
+                href="{{ url_for('become_mentor') }}"
+                class="nav-item"
+            >
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+                {{ student[0] }}
+            </div>
+
+
+            <div class="sidebar-user-details">
+
+                <strong>
+                    {{ student }}
+                </strong>
+
+                <span>
+                    SSN Student
+                </span>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="logout-button"
+                title="Logout"
+            >
+                ↗
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+
+            <form
+                class="topbar-search"
+                action="{{ url_for('mentors') }}"
+            >
+
+                <span>⌕</span>
+
+                <input
+                    name="search"
+                    placeholder="Search skills, subjects or mentors..."
+                >
+
+            </form>
+
+
+            <div class="topbar-actions">
+
+
+                <a
+                    href="{{ url_for('messages') }}"
+                    class="icon-button"
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        text-decoration:none;
+                        color:#4f46e5;
+                    "
+                >
+                    ◇
+                </a>
+
+
+                <a
+                    href="{{ url_for('profile') }}"
+                    class="top-avatar"
+                    style="text-decoration:none;"
+                >
+                    {{ student[0] }}
+                </a>
+
+
+            </div>
+
+
+        </header>
+
+
+        <div class="dashboard-content">
+
+
+            <section class="welcome-section">
+
+                <div>
+
+                    <p class="welcome-label">
+                        WELCOME BACK
+                    </p>
+
+                    <h1>
+                        What do you want to
+                        <span>learn today?</span>
+                    </h1>
+
+                    <p>
+                        Find students around SSN who can help
+                        you build your next skill.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <form
+                class="big-search-card"
+                action="{{ url_for('mentors') }}"
+            >
+
+                <div class="big-search-icon">
+                    ⌕
+                </div>
+
+                <input
+                    name="search"
+                    placeholder="Try Python, Guitar, Calculus, UI/UX..."
+                >
+
+                <button type="submit">
+                    Find mentors
+                    <span>→</span>
+                </button>
+
+            </form>
+
+
+            <section>
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Explore skills
+                        </h2>
+
+                        <p>
+                            Discover what students across campus are teaching.
+                        </p>
+
+                    </div>
+
+                    <a href="{{ url_for('mentors') }}">
+                        View all →
+                    </a>
+
+                </div>
+
+
+                <div class="category-grid">
+
+
+                    <a
+                        class="category-card"
+                        href="/mentors?search=Python"
+                    >
+
+                        <div class="category-icon">
+                            &lt;/&gt;
+                        </div>
+
+                        <strong>
+                            Programming
+                        </strong>
+
+                        <span>
+                            Python, C++, DSA and more
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="category-card"
+                        href="/mentors?search=MATLAB"
+                    >
+
+                        <div class="category-icon">
+                            ∑
+                        </div>
+
+                        <strong>
+                            Academics
+                        </strong>
+
+                        <span>
+                            MATLAB, signals and circuits
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="category-card"
+                        href="/mentors?search=Guitar"
+                    >
+
+                        <div class="category-icon">
+                            ♫
+                        </div>
+
+                        <strong>
+                            Music
+                        </strong>
+
+                        <span>
+                            Guitar and music theory
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="category-card"
+                        href="/mentors?search=Figma"
+                    >
+
+                        <div class="category-icon">
+                            ✦
+                        </div>
+
+                        <strong>
+                            Design
+                        </strong>
+
+                        <span>
+                            Figma, UI/UX and Canva
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+            </section>
+
+
+            <section class="mentor-section">
+
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Popular mentors
+                        </h2>
+
+                        <p>
+                            Highly rated students ready to help.
+                        </p>
+
+                    </div>
+
+                    <a href="{{ url_for('mentors') }}">
+                        Browse mentors →
+                    </a>
+
+                </div>
+
+
+                <div class="mentor-grid">
+
+
+                    {% for mentor in mentors %}
+
+
+                    <article class="mentor-card">
+
+
+                        <div class="mentor-card-top">
+
+                            <div class="mentor-avatar blue-avatar">
+                                {{ mentor["name"][0] }}
+                            </div>
+
+                            <div class="mentor-status">
+                                {{ mentor["availability"] }}
+                            </div>
+
+                        </div>
+
+
+                        <h3>
+                            {{ mentor["name"] }}
+                        </h3>
+
+                        <p class="mentor-course">
+
+                            {{ mentor["department"] }}
+                            ·
+                            {{ mentor["year"] }}
+
+                        </p>
+
+
+                        <div class="skill-tags">
+
+                            {% for skill in mentor["skills"].split(",")[:2] %}
+
+                            <span>
+                                {{ skill.strip() }}
+                            </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="mentor-location">
+
+                            📍 {{ mentor["location"] }}
+
+                        </div>
+
+
+                        <div class="mentor-meta">
+
+                            <span>
+                                ⭐ {{ mentor["rating"] }}
+                            </span>
+
+                            <span>
+                                {{ mentor["sessions"] }} sessions
+                            </span>
+
+                        </div>
+
+
+                        <a
+                            class="mentor-button mentor-link"
+                            href="{{ url_for(
+                                'mentor_profile',
+                                mentor_id=mentor['id']
+                            ) }}"
+                        >
+                            View profile
+                        </a>
+
+
+                    </article>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ mentor["name"] }} | PeerUp
+    </title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/features.css') }}"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+
+<body class="app-body">
+
+
+<div class="app-layout">
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">P</div>
+
+            <div class="logo-text">
+                Peer<span>Up</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-item"
+            >
+                <span>⌂</span>
+                Home
+            </a>
+
+            <a
+                href="{{ url_for('mentors') }}"
+                class="nav-item active"
+            >
+                <span>⌕</span>
+                Find Mentors
+            </a>
+
+            <a
+                href="{{ url_for('campus_map') }}"
+                class="nav-item"
+            >
+                <span>◉</span>
+                Campus Map
+            </a>
+
+            <a
+                href="{{ url_for('bookings') }}"
+                class="nav-item"
+            >
+                <span>◷</span>
+                My Sessions
+            </a>
+
+            <a
+                href="{{ url_for('messages') }}"
+                class="nav-item"
+            >
+                <span>◇</span>
+                Messages
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <p class="nav-section-title">
+                YOUR ACCOUNT
+            </p>
+
+            <a
+                href="{{ url_for('profile') }}"
+                class="nav-item"
+            >
+                <span>♙</span>
+                My Profile
+            </a>
+
+            <a
+                href="{{ url_for('become_mentor') }}"
+                class="nav-item"
+            >
+                <span>☆</span>
+                Become a Mentor
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div class="page-top-links">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="page-top-link"
+                >
+                    ← Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('mentors') }}"
+                    class="page-top-link"
+                >
+                    Find Mentors
+                </a>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <a
+                    href="{{ url_for('messages', mentor_id=mentor['id']) }}"
+                    class="icon-button"
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        text-decoration:none;
+                        color:#4f46e5;
+                    "
+                >
+                    ◇
+                </a>
+
+                <a
+                    href="{{ url_for('profile') }}"
+                    class="top-avatar"
+                    style="text-decoration:none;"
+                >
+                    {{ session["student"][0] }}
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <div class="dashboard-content">
+
+
+            <a
+                class="back-link"
+                href="{{ url_for('mentors') }}"
+            >
+                ← Back to mentors
+            </a>
+
+
+            <div class="profile-layout">
+
+
+                <div>
+
+
+                    <section class="mentor-profile-card">
+
+
+                        <div class="profile-header">
+
+                            <div class="profile-avatar">
+                                {{ mentor["name"][0] }}
+                            </div>
+
+                            <div>
+
+                                <div class="mentor-status">
+                                    {{ mentor["availability"] }}
+                                </div>
+
+                                <h1>
+                                    {{ mentor["name"] }}
+                                </h1>
+
+                                <p>
+                                    {{ mentor["department"] }}
+                                    ·
+                                    {{ mentor["year"] }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-stats">
+
+                            <div>
+
+                                <strong>
+                                    {{ mentor["rating"] }}
+                                </strong>
+
+                                <span>
+                                    Rating
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    {{ mentor["sessions"] }}
+                                </strong>
+
+                                <span>
+                                    Sessions
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    ₹{{ mentor["price"] }}
+                                </strong>
+
+                                <span>
+                                    Per session
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-section">
+
+                            <h3>
+                                About
+                            </h3>
+
+                            <p>
+                                {{ mentor["bio"] }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="profile-section">
+
+                            <h3>
+                                Skills
+                            </h3>
+
+                            <div class="skill-tags">
+
+                                {% for skill in mentor["skills"].split(",") %}
+
+                                <span>
+                                    {{ skill.strip() }}
+                                </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-section">
+
+                            <h3>
+                                Preferred meeting location
+                            </h3>
+
+                            <p>
+                                📍 {{ mentor["location"] }}
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            style="
+                                display:flex;
+                                gap:9px;
+                                margin-top:25px;
+                            "
+                        >
+
+                            <a
+                                href="{{ url_for(
+                                    'messages',
+                                    mentor_id=mentor['id']
+                                ) }}"
+                                class="primary-link"
+                            >
+                                Message mentor
+                            </a>
+
+                            <a
+                                href="{{ url_for('campus_map') }}"
+                                class="mentor-button mentor-link"
+                                style="
+                                    width:auto;
+                                    padding:0 16px;
+                                    margin:0;
+                                "
+                            >
+                                Campus map
+                            </a>
+
+                        </div>
+
+
+                    </section>
+
+
+                    <section class="review-section page-card">
+
+
+                        <div class="review-section-header">
+
+                            <h3>
+                                Student reviews
+                            </h3>
+
+                            <span>
+                                {{ reviews|length }} reviews
+                            </span>
+
+                        </div>
+
+
+                        {% for review in reviews %}
+
+
+                        <div class="review-card">
+
+                            <div class="review-top">
+
+                                <strong>
+                                    {{ review["reviewer_name"] }}
+                                </strong>
+
+                                <span class="review-stars">
+
+                                    {% for i in range(review["rating"]) %}
+                                        ★
+                                    {% endfor %}
+
+                                </span>
+
+                            </div>
+
+                            <p>
+                                {{ review["comment"] }}
+                            </p>
+
+                        </div>
+
+
+                        {% else %}
+
+
+                        <div class="review-card">
+
+                            <p>
+                                No reviews yet.
+                            </p>
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                        {% if can_review %}
+
+
+                        <form
+                            class="review-form"
+                            method="POST"
+                            action="{{ url_for(
+                                'submit_review',
+                                mentor_id=mentor['id']
+                            ) }}"
+                        >
+
+                            <h4>
+                                {% if existing_review %}
+                                    Update your review
+                                {% else %}
+                                    Rate your mentor
+                                {% endif %}
+                            </h4>
+
+
+                            <div class="rating-select">
+
+                                {% for number in range(1, 6) %}
+
+                                <label>
+
+                                    <input
+                                        type="radio"
+                                        name="rating"
+                                        value="{{ number }}"
+
+                                        {% if existing_review and existing_review["rating"] == number %}
+                                            checked
+                                        {% elif not existing_review and number == 5 %}
+                                            checked
+                                        {% endif %}
+                                    >
+
+                                    <span>
+                                        {{ number }}★
+                                    </span>
+
+                                </label>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <textarea
+                                name="comment"
+                                placeholder="Share your experience..."
+                                required
+                            >{% if existing_review %}{{ existing_review["comment"] }}{% endif %}</textarea>
+
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                style="margin-top:10px;"
+                            >
+                                Submit review
+                            </button>
+
+
+                        </form>
+
+
+                        {% endif %}
+
+
+                    </section>
+
+
+                </div>
+
+
+                <aside class="booking-panel">
+
+
+                    <h2>
+                        Book a session
+                    </h2>
+
+                    <p class="booking-description">
+                        Choose a time and learning format
+                        that works for both of you.
+                    </p>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'book_mentor',
+                            mentor_id=mentor['id']
+                        ) }}"
+                    >
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="session_date"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Time
+                            </label>
+
+                            <input
+                                type="time"
+                                name="session_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Session type
+                            </label>
+
+                            <select
+                                name="session_type"
+                                required
+                            >
+
+                                <option value="In Person">
+                                    In Person
+                                </option>
+
+                                <option value="Online">
+                                    Online
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                Payment / Exchange
+                            </label>
+
+                            <select
+                                name="exchange_type"
+                                id="exchangeType"
+                                required
+                                onchange="toggleSkillExchange()"
+                            >
+
+                                <option value="Paid Session">
+
+                                    Paid Session —
+                                    ₹{{ mentor["price"] }}
+
+                                </option>
+
+                                <option value="Skill Exchange">
+                                    Skill Exchange
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div
+                            class="form-field"
+                            id="exchangeSkillBox"
+                            style="display:none;"
+                        >
+
+                            <label>
+                                Skill you can offer
+                            </label>
+
+                            <input
+                                type="text"
+                                name="exchange_skill"
+                                placeholder="Example: Canva, C++, Guitar..."
+                            >
+
+                        </div>
+
+
+                        <div class="form-field">
+
+                            <label>
+                                What do you want help with?
+                            </label>
+
+                            <textarea
+                                name="notes"
+                                placeholder="Tell your mentor what you'd like to learn..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <button
+                            class="primary-button"
+                            type="submit"
+                        >
+                            Continue →
+                        </button>
+
+
+                    </form>
+
+
+                </aside>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+function toggleSkillExchange() {
+
+    const type =
+        document.getElementById(
+            "exchangeType"
+        ).value;
+
+    const box =
+        document.getElementById(
+            "exchangeSkillBox"
+        );
+
+    box.style.display =
+        type === "Skill Exchange"
+        ? "block"
+        : "none";
+
+}
+
+</script>
+
+
+</body>
+</html>
